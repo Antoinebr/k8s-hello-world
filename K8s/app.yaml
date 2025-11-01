@@ -20,7 +20,7 @@ spec:
         # ==========================================================
         # !! IMPORTANT !!
         # Change this to your Docker Hub username and image name
-        image: antoinebr/k8s-hello-world:v1
+        image: antoinebr/k8s-hello-world:v3
         # ==========================================================
         
         # This tells K8s to always pull the newest "main" image
