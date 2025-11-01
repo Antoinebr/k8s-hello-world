@@ -1,0 +1,66 @@
+# MAKE SURE to change the domain and image name below!
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+spec:
+  replicas: 2 # Let's run 2 copies
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: app
+        # ==========================================================
+        # !! IMPORTANT !!
+        # Change this to your Docker Hub username and image name
+        image: antoinebr/k8s-hello-world:main
+        # ==========================================================
+        
+        # This tells K8s to always pull the newest "main" image
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 3000 # The port from your index.js
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+spec:
+  # This makes it an internal-only service
+  type: ClusterIP 
+  selector:
+    app: hello-world # Connects this service to the Deployment
+  ports:
+  - port: 80
+    targetPort: 3000 # Route traffic from port 80 to our app's port 3000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-world-ingress
+spec:
+  rules:
+  # ==========================================================
+  # !! IMPORTANT !!
+  # Change this to the domain you want to use
+  - host: hello.home 
+  # ==========================================================
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # Must match the Service name above
+            name: hello-world-service 
+            port:
+              number: 80 # Must match the Service port above
