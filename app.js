@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // A "VERSION" variable we can change later 
-const VERSION = '2.0.0';
+const VERSION = '3.0.0';
 
 app.get('/', (req, res) => {
   res.send(`Hello from Kubernetes! Version: ${VERSION}`);
